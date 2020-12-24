@@ -89,63 +89,39 @@ def fourth_level() -> bool:
     """
     Return True if the answer is right and False is it is not.
     """
+    def one_part_of_level(random_prop: str, info: dict, func: dict) -> bool:
+        """
+        Run the one part of level, return True if this part is passed correctly
+        """
+        print(info[random_prop])
+        output_list = create_output_list(func[random_prop]())
+        right_number = right_answer(func[random_prop]())
+        output_list.append(right_number)
+        random.shuffle(output_list)
+        print(output_list)
+        answer = int(input())
+        res = True
+        if answer != right_number:
+            res = False
+        return res
+
+
     list_of_properties = ['None', 'Even & Happy', 'Even & Ulam', 'Happy & Ulam', 'All']
+    info = {'None': "Choose the number that isn't even or happy or Ulam:",
+            'Even & Happy': "Choose the number that is both even and happy:",
+            'Even & Ulam': "Choose the number that is both even and Ulam:",
+            'Happy & Ulam': "Choose the number that is both Ulam and happy:",
+            'All': "Choose the number that is even, happy and Ulam:"}
+    func = {'None': none_prop,
+            'Even & Happy': even_and_happy,
+            'Even & Ulam': even_and_ulam,
+            'Happy & Ulam': happy_and_ulam,
+            'All': all_prop}
     random.shuffle(list_of_properties)
     users_life = True
     for random_prop in list_of_properties:
-        if random_prop == 'None':
-            print("Choose the number that isn't even or happy or Ulam:")
-            output_list = create_output_list(none_prop())
-            right_number = right_answer(none_prop())
-            output_list.append(right_number)
-            random.shuffle(output_list)
-            print(output_list)
-            answer = int(input())
-            if answer != right_number:
-                users_life = False
-
-        elif random_prop == 'Even & Happy':
-            print("Choose the number that is both even and happy:")
-            output_list = create_output_list(even_and_happy())
-            right_number = right_answer(even_and_happy())
-            output_list.append(right_number)
-            random.shuffle(output_list)
-            print(output_list)
-            answer = int(input())
-            if answer != right_number:
-                users_life = False
-
-        elif random_prop == 'Even & Ulam':
-            print("Choose the number that is both even and Ulam:")
-            output_list = create_output_list(even_and_ulam())
-            right_number = right_answer(even_and_ulam())
-            output_list.append(right_number)
-            random.shuffle(output_list)
-            print(output_list)
-            answer = int(input())
-            if answer != right_number:
-                users_life = False
-
-        elif random_prop == 'Happy & Ulam':
-            print("Choose the number that is both Ulam and happy:")
-            output_list = create_output_list(happy_and_ulam())
-            right_number = right_answer(happy_and_ulam())
-            output_list.append(right_number)
-            random.shuffle(output_list)
-            print(output_list)
-            answer = int(input())
-            if answer != right_number:
-                users_life = False
-
-        elif random_prop == 'All':
-            print("Choose the number that is even, happy and Ulam:")
-            output_list = create_output_list(all_prop())
-            right_number = right_answer(all_prop())
-            output_list.append(right_number)
-            random.shuffle(output_list)
-            print(output_list)
-            answer = int(input())
-            if answer != right_number:
-                users_life = False
+        res = one_part_of_level(random_prop, info, func)
+        if not res:
+            users_life = False
 
     return users_life
